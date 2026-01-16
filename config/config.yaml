@@ -2,3 +2,6 @@ app:
   app_name: fiber-file-converter
   hostname: localhost
   port: 6565
+  env: prod # prod: InfoLevel Log | dev: DebugLevel Log
+  log_path: ../logs
+  log_file: app.log

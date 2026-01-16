@@ -2,11 +2,14 @@ package main
 
 import (
 	"fiber-file-converter-api/pkg/config"
-	"fmt"
+	"fiber-file-converter-api/pkg/log"
 )
 
 func main() {
 	// load config file
 	cfg := config.Load()
-	fmt.Println(cfg)
+
+	// Initalize zap logger
+	logger := log.Load(cfg.App.Env, cfg.App.LogPath, cfg.App.LogFile)
+	defer logger.Sync()
 }

@@ -11,6 +11,9 @@ type AppConfig struct {
 	AppName  string `mapstructure:"app_name"`
 	Hostname string `mapstructure:"hostname"`
 	Port     string `mapstructure:"port"`
+	Env      string `mapstructure:"env"`
+	LogPath  string `mapstructure:"log_path"`
+	LogFile  string `mapstructure:"log_file"`
 }
 
 type Config struct {
