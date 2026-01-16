@@ -5,3 +5,7 @@ app:
   env: prod # prod: InfoLevel Log | dev: DebugLevel Log
   log_path: ../logs
   log_file: app.log
+  read_timeout: 5
+  write_timeout: 5
+  idle_timeout: 5
+  graceful_shutdown_timeout: 5
