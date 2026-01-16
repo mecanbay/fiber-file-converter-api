@@ -1,0 +1,4 @@
+app:
+  app_name: fiber-file-converter
+  hostname: localhost
+  port: 6565
