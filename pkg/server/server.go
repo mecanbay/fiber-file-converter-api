@@ -42,7 +42,7 @@ func Start(app *fiber.App, cfg *config.AppConfig) {
 			zap.L().Fatal(fmt.Sprintf(ErrServerStart, err.Error()))
 		}
 	}()
-	zap.L().Info(MsgServerStarted)
+	zap.L().Info(fmt.Sprintf(MsgServerStarted, cfg.Port))
 	gracefulShutdown(app, cfg.GracefulShutdownTimeout)
 }
 

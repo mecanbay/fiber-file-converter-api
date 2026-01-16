@@ -1,0 +1,9 @@
+services:
+  api:
+    container_name: fiber-file-converter-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6565:6565"
+    restart: unless-stopped
