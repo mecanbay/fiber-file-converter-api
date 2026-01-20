@@ -3,6 +3,7 @@ package main
 import (
 	healthHttp "fiber-file-converter-api/internal/adapters/inbound/http/handler/health"
 	metricsHttp "fiber-file-converter-api/internal/adapters/inbound/http/handler/metrics"
+	"fiber-file-converter-api/internal/adapters/inbound/http/middleware"
 	healthApp "fiber-file-converter-api/internal/application/health"
 	"fiber-file-converter-api/internal/observability/metrics"
 	"fiber-file-converter-api/pkg/config"
@@ -24,8 +25,13 @@ func main() {
 	// Initalize Fiber Server
 	app := server.New(&cfg.App)
 
-	// dependency injection
+	// middlewares
+	// request id middleware
+	app.Use(middleware.RequestID())
+	// request logger middleware
+	app.Use(middleware.RequestLogger())
 
+	// dependency injection
 	healthService := healthApp.NewService()
 
 	healthHandler := healthHttp.NewHandler(healthService)

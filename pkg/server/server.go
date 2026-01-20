@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -27,6 +28,7 @@ func New(cfg *config.AppConfig) *fiber.App {
 		ReadTimeout:           cfg.ReadTimeout * time.Second,
 		WriteTimeout:          cfg.WriteTimeout * time.Second,
 		DisableStartupMessage: false,
+		ErrorHandler:          errorHandler,
 	}
 
 	app := fiber.New(config)
@@ -54,4 +56,38 @@ func gracefulShutdown(app *fiber.App, timeout time.Duration) {
 		zap.L().Error(fmt.Sprintf(ErrGracefulShutdown, err.Error()))
 	}
 	zap.L().Info(MsgGracefulShutdown)
+}
+
+func errorHandler(c *fiber.Ctx, err error) error {
+	code := fiber.StatusInternalServerError
+	if e, ok := err.(*fiber.Error); ok {
+		code = e.Code
+	}
+
+	path := c.Path()
+
+	if strings.HasPrefix(path, "/.well-known/") || path == "/favicon.icon" {
+		return c.SendStatus(code)
+	}
+
+	fields := []zap.Field{
+		zap.Error(err),
+		zap.Int("status", code),
+		zap.String("path", path),
+		zap.String("method", c.Method()),
+	}
+
+	switch {
+	case code >= 500:
+		zap.L().Error("unhandled error", fields...)
+	case code >= 400:
+		zap.L().Warn("http client error", fields...)
+	default:
+		zap.L().Debug("http error", fields...)
+	}
+
+	return c.Status(code).JSON(fiber.Map{
+		"error": err.Error(),
+	})
+
 }
