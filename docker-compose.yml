@@ -7,3 +7,17 @@ services:
     ports:
       - "6565:6565"
     restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "-qO-",
+          "-U",
+          "fiber-healthcheck",
+          "http://0.0.0.0:6565/health",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
