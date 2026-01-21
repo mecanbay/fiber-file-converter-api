@@ -1,12 +1,15 @@
 services:
   api:
     container_name: fiber-file-converter-api
+    user: "1000:1000"
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "6565:6565"
     restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
     healthcheck:
       test:
         [
