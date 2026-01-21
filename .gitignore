@@ -56,3 +56,4 @@ Thumbs.db
 # Vendor (ignore ONLY if you do not commit vendor)
 # -------------------------------------------------
 /vendor/
+/docker-compose-prod.yml
